@@ -3,7 +3,7 @@ import {BrowserRouter,Redirect,Switch,Route} from 'react-router-dom'
 
 import Home from './Pages/home'
 import Login from './Pages/login'
-import Signup from './Pages/signup'
+import Signup from './Pages/findMatch'
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
           <Route path='/login' exact>
             <Login/>
           </Route>
-          <Route path='/signup' exact>
+          <Route path='/register' exact>
             <Signup/>
           </Route>
           <Route path='/' >
