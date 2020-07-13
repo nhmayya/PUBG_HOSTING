@@ -2,11 +2,13 @@ const express=require('express');
 const bodyParser=require('body-parser');
 const HttpError=require('./models/http-error');
 const userRoute=require('./routes/users-routes');
+const roomRoute=require('./routes/roomid-routes');
 const mongoose=require('mongoose');
 const app=express();
 app.use(bodyParser.json());
 //app.use('/api/places',placeRoute);
 app.use('/api/users',userRoute);
+app.use('/api/rooms',roomRoute);
 //we have to import and use the routes folder
 app.use((req,res,next)=>{
     const error=new HttpError('Invalid URL',404);
