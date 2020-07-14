@@ -1,3 +1,10 @@
+.selector {
+    padding: 5rem;
+    font-size: 1.7rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: darkblue;
+}
+
 .authentication__header {
     color: black;
     text-align: center;

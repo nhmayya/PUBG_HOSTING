@@ -38,7 +38,7 @@ const cards = () => {
                                 <div className="card__cta">
                                     <div className="card__price-box">
                                         <p className="card__price-only">only</p>
-                                        <p className="card__price-value">$69</p>
+                                        <p className="card__price-value">₹10</p>
                                     </div>
                                     <a href="#popup" className="btn btn--white">REGister now</a>
                                 </div>
@@ -72,7 +72,7 @@ const cards = () => {
                                 <div className="card__cta">
                                     <div className="card__price-box">
                                         <p className="card__price-only">only</p>
-                                        <p className="card__price-value">$69</p>
+                                        <p className="card__price-value">₹10</p>
                                     </div>
                                     <a href="#popup" className="btn btn--white">REGister now</a>
                                 </div>
@@ -106,7 +106,7 @@ const cards = () => {
                                 <div className="card__cta">
                                     <div className="card__price-box">
                                         <p className="card__price-only">only</p>
-                                        <p className="card__price-value">$69</p>
+                                        <p className="card__price-value">₹10</p>
                                     </div>
                                         <a href="#popup" className="btn btn--white">REGister now</a>
                                     </div>

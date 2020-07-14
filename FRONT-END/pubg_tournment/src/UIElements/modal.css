@@ -4,13 +4,16 @@
     top: 22vh;
     left: 10%;
     width: 80%;
+    max-width: 200rem;
     background: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     border-radius: 8px;
   }
   
   .modal__header {
-    width: 100%;
+    width:100%;
+    
+    max-width: 200rem;
     padding: 1rem 0.5rem;
     background: #2a006e;
     color: white;
@@ -22,6 +25,7 @@
   
   .modal__content {
     padding: 1rem 0.5rem;
+    color: darkblue;
   }
   
   .modal__footer {
@@ -30,8 +34,8 @@
   
   @media (min-width: 768px) {
     .modal {
-      left: calc(50% - 20rem);
-      width: 40rem;
+      left: calc(30% - 20rem);
+      width: 75%;
     }
   }
   

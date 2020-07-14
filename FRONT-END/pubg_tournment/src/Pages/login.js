@@ -9,6 +9,7 @@ import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../FormElements/validater'
 import Input from '../FormElements/Input'
 import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
+import './login.css'
 
 const Login=props=>{
     const [isLoading,setLoading]=useState(false);
@@ -34,6 +35,7 @@ const Login=props=>{
               isValid:false
           }
       })
+      try{
     var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
         size:"invisible",
         callback:function (response){
@@ -49,6 +51,10 @@ const Login=props=>{
           seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime");
           setLoading(false);
       });
+    }catch(err){
+        setLoading(false);
+        seterror("Try again")
+    }
     
   }
 
@@ -72,8 +78,8 @@ const Login=props=>{
     <Card className="authentication">
         
     {isLoading && <LoadingSpinner asOverlay/>}
-        <h2>Continue with your phone</h2>
-        <form>
+        <h2 className="authentication__header">Continue with your phone</h2>
+        <form >
             <Input
                 element='input'
                 id="phone"

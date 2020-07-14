@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 
 import './nav.css';
 
@@ -17,9 +18,9 @@ const nav = () => {
                 <ul className="navigation__list">
                     <li className="navigation__item"><a href="#" className="navigation__link"><span>01</span>home</a></li>
                     <li className="navigation__item"><a href="#" className="navigation__link"><span>02</span>rules</a></li>
-                    <li className="navigation__item"><a href="#" className="navigation__link"><span>03</span>find</a></li>
+                    <li className="navigation__item"><a href="/register" className="navigation__link"><span>03</span>find</a></li>
                     <li className="navigation__item"><a href="#" className="navigation__link"><span>04</span>about</a></li>
-                    <li className="navigation__item"><a href="#" className="navigation__link"><span>05</span>login/sign up</a></li>
+                    <li className="navigation__item"><a href="/login" className="navigation__link"><span>05</span>Login</a></li>
                 </ul>
             </nav>
         </div>
