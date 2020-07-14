@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Select from 'react-select'
-import {useHistory} from 'react-router-dom'
 
 import './findMatch.css'
 import Input from '../FormElements/Input'
@@ -9,7 +8,7 @@ import Card from '../UIElements/Card'
 import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
 
-import GPayButton from 'react-google-pay-button'
+// import GPayButton from 'react-google-pay-button'
 
 const Signup=props=>{
 
@@ -20,7 +19,7 @@ const Signup=props=>{
     {value:'4',label:'Four'}
   ];
 
-  const history=useHistory();
+  
 
   const [selected,setSelected]=useState(null);
   const [localStoring,setLoacalStoring]=useState(false)
@@ -45,24 +44,24 @@ const Signup=props=>{
   }
 
 //GPay code
-const loadPaymentDataHandler = paymentData => {
-  console.log('App.loadPaymentDataHandler: paymentData', paymentData)
-  // const paymentToken = paymentData.paymentMethodData.tokenizationData.token
-}
+// const loadPaymentDataHandler = paymentData => {
+//   console.log('App.loadPaymentDataHandler: paymentData', paymentData)
+//   // const paymentToken = paymentData.paymentMethodData.tokenizationData.token
+// }
 
-const paymentAuthorizedHandler = paymentData => {
-  console.log('App.paymentAuthorizedHandler: paymentData', paymentData)
-  // const paymentToken = paymentData.paymentMethodData.tokenizationData.token
-  // TODO execute payment
-}
+// const paymentAuthorizedHandler = paymentData => {
+//   console.log('App.paymentAuthorizedHandler: paymentData', paymentData)
+//   // const paymentToken = paymentData.paymentMethodData.tokenizationData.token
+//   // TODO execute payment
+// }
 
-const onUserCanceledHandler = paymentRequest => {
-  console.log('App.onUserCanceledHandler: paymentRequest', paymentRequest)
-}
+// const onUserCanceledHandler = paymentRequest => {
+//   console.log('App.onUserCanceledHandler: paymentRequest', paymentRequest)
+// }
 
-const paymentDataChangedHandler = paymentData => {
-  console.log('App.paymentDataChangedHandler: paymentData', paymentData)
-}
+// const paymentDataChangedHandler = paymentData => {
+//   console.log('App.paymentDataChangedHandler: paymentData', paymentData)
+// }
 
 
 
@@ -87,7 +86,9 @@ const paymentDataChangedHandler = paymentData => {
           onChange={handleSelection}
           options={options}/>
         </form>
-
+          
+          {selected && 
+          <h1>You have to pay {selected * 10}₹ </h1>}
           {selected && <Card className="authentication">
             <form>
               {selected>0 && <Input
@@ -138,10 +139,9 @@ const paymentDataChangedHandler = paymentData => {
                  </Button>
             </form>
             </Card>}
-            {localStoring &&
+            {/* {localStoring &&
                <Card className="authentication">
                     <GPayButton
-                      defaultValue={"Click here to Payment"}
                       totalPriceStatus={'FINAL'}
                       totalPrice={'1.45'}
                       currencyCode={'GBP'}
@@ -153,7 +153,7 @@ const paymentDataChangedHandler = paymentData => {
                     />
                   
                   </Card>
-                }
+                } */}
    </React.Fragment>
   );
 }
