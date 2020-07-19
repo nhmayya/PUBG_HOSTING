@@ -1,15 +1,18 @@
 const express=require('express');
 const bodyParser=require('body-parser');
 const HttpError=require('./models/http-error');
-const userRoute=require('./routes/users-routes');
-const roomRoute=require('./routes/roomid-routes');
-const teamRoute=require('./routes/team-routes');
+const userRoute=require('./routes/user_register_routes');//login
+const userIdRoutes=require('./routes/user_id_routes');// if(uid) {response : roomid}
+// const SEAT=require('./routes/');
+// const Register=require('./routes/');
+// const userIdRoutes=require('./routes/');
+
+
 const mongoose=require('mongoose');
 const app=express();
 app.use(bodyParser.json());
-app.use('/api/users',userRoute);
-app.use('/api/rooms',roomRoute);
-//app.use('/api/teams',teamRoute);
+app.use('/api/Login',userRoute);
+app.use('/api/',userIdRoutes); // SHOULD COMPLETE THE URL LINK
 //we have to import and use the routes folder
 app.use((req,res,next)=>{
     const error=new HttpError('Invalid URL',404);
