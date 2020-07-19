@@ -17,13 +17,13 @@ const nav = () => {
             <nav className="navigation__nav">
                 <ul className="navigation__list">
                     <li className="navigation__item"><a href="#" className="navigation__link"><span>01</span>home</a></li>
-                    <li className="navigation__item"><a href="#" className="navigation__link"><span>02</span>rules</a></li>
+                    <li className="navigation__item"><a href="/rules" className="navigation__link"><span>02</span>rules</a></li>
                     <Link  to='/register' className="navigation__item">
                         <a href="/register" className="navigation__link">
                             <span>03</span>find
                             </a>
                             </Link>
-                    <li className="navigation__item"><a href="#" className="navigation__link"><span>04</span>about</a></li>
+                    <li className="navigation__item"><a href="/about" className="navigation__link"><span>04</span>about</a></li>
                     <li className="navigation__item"><a href="/login" className="navigation__link"><span>05</span>Login</a></li>
                 </ul>
             </nav>
