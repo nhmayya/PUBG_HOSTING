@@ -1,8 +1,8 @@
 .selector {
-    padding: 5rem;
+    padding: 2rem;
     font-size: 1.7rem;
     font-family: Arial, Helvetica, sans-serif;
-    color: darkblue;
+    color: black;
 }
 
 
@@ -14,8 +14,10 @@
   
   .authentication {
     width: 90%;
+    color: darkturquoise;
     max-width: 50rem;
-    margin: 7rem auto;
+    margin: 2rem auto;
+    font-size: medium;
     text-align: center;
   }
   

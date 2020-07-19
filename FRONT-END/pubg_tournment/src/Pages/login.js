@@ -9,12 +9,15 @@ import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../FormElements/validater'
 import Input from '../FormElements/Input'
 import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
+import {useHttpClient} from '../Hook/Http-Hook'
 import './login.css'
+import { auth } from 'firebase';
 
 const Login=props=>{
-    const [isLoading,setLoading]=useState(false);
+    const [isLoading1,setLoading1]=useState(false);
+    const {isLoading,error,sendRequest,clearError}=useHttpClient();
     const [otp,setotp]=useState(null);
-    const [error,seterror]=useState();
+    const [error1,seterror]=useState();
     const history=useHistory();
     const [formstate,inputHandler,setFormData]=useForm(
         {
@@ -27,7 +30,7 @@ const Login=props=>{
 
   const sendOTP=(event)=>{
       event.preventDefault();
-      setLoading(true);
+      setLoading1(true);
       setFormData({
           ...formstate.inputs,
           phone:{
@@ -45,14 +48,14 @@ const Login=props=>{
     var number = '+91'+formstate.inputs.phone.value;
     firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
         setotp(e);
-        setLoading(false);
+        setLoading1(false);
       })
       .catch(function (error) {
           seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime");
-          setLoading(false);
+          setLoading1(false);
       });
     }catch(err){
-        setLoading(false);
+        setLoading1(false);
         seterror("Try again")
     }
     
@@ -60,24 +63,37 @@ const Login=props=>{
 
   const verifyOTP=(event)=>{
     event.preventDefault();
-    setLoading(false);
-    otp.confirm(formstate.inputs.otp.value).then(function (result) {
+    setLoading1(false);
+    otp.confirm(formstate.inputs.otp.value).then(async function (result) {
+        
+        //send post to backend
+        try {
+            const formData=new FormData();
+            formData.append('Phone',formstate.inputs.phone.value)
+            const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/LOGIN`,'POST',{},formData);
+             //responese handling
+             console.log(responseData);
+           } catch (err) {}
+        //auth.LOGIN(UserID,Phone,Players)
+
         console.log(result.user);
         history.push('/');
      }).catch(function (error) {
         console.error( error);
         seterror("OTP verification failed");
     });
-    setLoading(false);
+    setLoading1(false);
   }
 
     return(
     <React.Fragment>    
 
-    {error && <ErrorModel error={error} onClear={()=>{seterror()}}/>}
+    {error1 && <ErrorModel error={error1} onClear={()=>{seterror()}}/>}
+    <ErrorModel error={error} onClear={clearError}/>
+    {isLoading && <LoadingSpinner asOverlay/>}
     <Card className="authentication">
         
-    {isLoading && <LoadingSpinner asOverlay/>}
+    {isLoading1 && <LoadingSpinner asOverlay/>}
         <h2 className="authentication__header">Continue with your phone</h2>
         <form >
             <Input
