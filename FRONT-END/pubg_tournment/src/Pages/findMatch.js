@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import Select from 'react-select'
 
 import './findMatch.css'
@@ -7,10 +7,18 @@ import {VALIDATOR_REQUIRE} from '../FormElements/validater'
 import Card from '../UIElements/Card'
 import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
+import {AuthContext} from '../context/UserContext'
+import {useHttpClient} from '../Hook/Http-Hook'
+import { Link } from 'react-router-dom'
+import LoadingSpinner from '../UIElements/LoadingSpinner'
+import ErrorModal from '../UIElements/Error'
 
 // import GPayButton from 'react-google-pay-button'
 
 const Signup=props=>{
+
+  const auth=useContext(AuthContext);
+  const {isLoading,error,sendRequest,clearError}=useHttpClient();
 
   const options=[
     {value:'1',label:'One'},
@@ -18,6 +26,38 @@ const Signup=props=>{
     {value:'3',label:'Three'},
     {value:'4',label:'Four'}
   ];
+  let optionsFine=[];
+
+  const [RRselected,setRRselected]=useState(false);
+  const [AVAIL, setAVAIL] = useState();
+  const [emptySEAT,setemptySEAT]=useState(false)
+
+  useEffect(() => {
+    const send = async () => {
+      document.body.style.backgroundImage="url('https://www.hdwallpapers.in/download/alan_walker_a_ap_rocky_live_fast_pubg_4k-3840x2160.jpg')";
+      document.body.style.backgroundRepeat='no-repeat';
+      document.body.style.backgroundSize='cover';
+      if(auth.isLogedIn){
+      try {
+       const responseData= await sendRequest(`http://localhost:5000/${auth.UserID}/SEAT`);
+        
+        setAVAIL(responseData.SEAT);
+        if(AVAIL===0) setemptySEAT(true)
+      else if(AVAIL<4){
+        if(auth.Players.length===2 && AVAIL===3){
+          optionsFine=options.slice(0,2)}
+        else if(auth.Players.length===3 && AVAIL>1){
+          optionsFine=options.slice(0,1);
+        }
+        else
+          optionsFine=options.slice(0,AVAIL);
+      }
+    }
+       catch (err) {}
+  } 
+    };
+    send();
+  }, [sendRequest]);
 
   
 
@@ -35,11 +75,25 @@ const Signup=props=>{
     setSelected(selectedValue.value);
   }
 
-  const submitHandler=event=>{
+  const submitHandler=async (event)=>{
     event.preventDefault();
-    setLoacalStoring(true)
-    console.log(formstate.inputs);//send selected also
-    //backend
+    setLoacalStoring(true);
+    var PArray=PArray=[formstate.inputs.first.value];
+    
+     if(selected==2) PArray=[formstate.inputs.first.value,formstate.inputs.second.value];
+     else if(selected==3) PArray=[formstate.inputs.first.value,formstate.inputs.second.value,formstate.inputs.third.value];
+     else PArray=[formstate.inputs.first.value,formstate.inputs.second.value,formstate.inputs.third.value,formstate.inputs.fourth.value] 
+    
+    const formData=new FormData();
+      formData.append('Phone',auth.Phone);
+      formData.append('Players',PArray);
+      formData.append('UserID',auth.UserID)
+      
+    try {
+      const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/Register`,'POST',{},formData);
+       //responese handling
+       console.log(responseData);
+     } catch (err) {}
     
   }
 
@@ -68,9 +122,38 @@ const Signup=props=>{
 
   return(
     <React.Fragment>
+
+      <ErrorModal error={error} onClear={clearError} />
       
+      {isLoading && (
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            )
+       }
       
-        <form className="selector">
+            {/* if Not loged in back to login page */}
+            {!auth.isLogedIn &&
+            <Card className="authentication">
+              <h1 className="authentication__header"> YOU ARE NOT LOGED IN</h1>
+            <Link to='/login'>
+              <Button>Click here</Button>
+              </Link>
+              </Card>
+            }
+
+            {auth.isLogedIn && auth.Players.length===4 && <Card className="authentication">
+              <h1 className="authentication__header"> YOU ALREADY REGISTERED MAX SEAT</h1>
+              {/* add imogy */}
+              </Card>}
+
+            {/* SELECT PLAYERS */}
+        {auth.isLogedIn && emptySEAT &&  <Card className="authentication">
+              <h1 className="authentication__header"> ALL SEATS ARE SALED</h1>
+              {/* add imogy */}
+              </Card>}
+        
+        {auth.isLogedIn && !emptySEAT && <form className="selector">
           <Select
            theme={theme => ({
             ...theme,
@@ -84,13 +167,13 @@ const Signup=props=>{
           placeholder="Select the number of players,you want to REGISTER"
           defaultValue={selected}
           onChange={handleSelection}
-          options={options}/>
-        </form>
+          options={optionsFine}/>
+        </form>}
           
           {selected && 
           <h1>You have to pay {selected * 10}₹ </h1>}
           {selected && <Card className="authentication">
-            <form>
+            <form className="authentication">
               {selected>0 && <Input
                id="first"
                type="text"
@@ -99,7 +182,9 @@ const Signup=props=>{
                element='input'
                validators={[VALIDATOR_REQUIRE()]}
                errorText="Enter the field as per PUBG account, otherwise you won't allow for match"
-               onInput={inputHandler}/>}
+               onInput={inputHandler}/> }
+
+               
 
               {selected>1 && <Input
                id="second"
@@ -111,6 +196,7 @@ const Signup=props=>{
                errorText="Enter the field as per PUBG account, otherwise you won't allow for match"
                onInput={inputHandler}/>}
 
+
                {selected>2 && <Input
                 id="third"
                 element='input'
@@ -119,7 +205,9 @@ const Signup=props=>{
                 value=''
                 validators={[VALIDATOR_REQUIRE()]}
                 errorText="Enter the field as per PUBG account, otherwise you won't allow for match"
-                onInput={inputHandler}/>}
+                onInput={inputHandler}/> }
+
+               
 
                 {selected>3 && <Input
                  id="fourth"
@@ -130,19 +218,27 @@ const Signup=props=>{
                  validators={[VALIDATOR_REQUIRE()]}
                  errorText="Enter the field as per PUBG account, otherwise you won't allow for match"
                  onInput={inputHandler}/>}
-                 
+
+                <hr/>
+                <label>
+                 <input type="checkbox"  onChange={()=>{setRRselected(!RRselected)}}/>
+                 By clicking this u r dead
+                 </label>
+                 <hr/>
+
                  <Button
                  type="submit"
                  onClick={submitHandler}
-                 disabled={!formstate.isValid}>
+                 disabled={!RRselected || !formstate.isValid}>
                     JAI PUBG
                  </Button>
             </form>
-            </Card>}
+             </Card>
+          }
             {/* {localStoring &&
                <Card className="authentication">
                     <GPayButton
-                      totalPriceStatus={'FINAL'}
+       fi               totalPriceStatus={'FINAL'}
                       totalPrice={'1.45'}
                       currencyCode={'GBP'}
                       countryCode={'GB'}

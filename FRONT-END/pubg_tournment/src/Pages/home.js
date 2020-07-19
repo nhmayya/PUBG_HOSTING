@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Logo from '../img/logo-white.png';
 import './home.css';
 
 const Home=props=>{
+    useEffect(()=>{
+        document.body.style.backgroundImage='url(null)';
+        document.body.style.backgroundColor='black'
+    })
     return(
-        <header className="header">
+        
+        <header className="header" >
             <div className="header__logo-box">
                 <img src={Logo} alt="Logo" className="header__logo"/>
             </div>
