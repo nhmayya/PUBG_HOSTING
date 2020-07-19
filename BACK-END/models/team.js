@@ -3,15 +3,14 @@ const mongoose = require('mongoose')
 var uniqueValidator = require('mongoose-unique-validator');
 const teamSchema = new mongoose.Schema({
 
-    match_timings : {
-        type : String,
-        required : true,
-    },
-
     playerone_id : {
         type : String,
-        required : true,
-        unique:true
+        required : false,
+        unique:true,
+        index: {
+            unique: true,
+            partialFilterExpression: {  playerone_id: { $type: 'string' } },
+          },
     },
 
     playertwo_id : {
@@ -46,5 +45,6 @@ const teamSchema = new mongoose.Schema({
 })
 teamSchema.plugin(uniqueValidator);
 
-team=mongoose.model('team',teamSchema);
-module.exports = team
+// team=mongoose.model('team',teamSchema);
+// module.exports = team
+module.exports=mongoose.model('Team',teamSchema);
