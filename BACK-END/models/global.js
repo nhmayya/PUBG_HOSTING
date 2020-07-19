@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
-const roomid = new mongoose.Schema({
-    id : {
-       // default : null,
+const global = new mongoose.Schema({
+    room_id : {
+        // default : null,
         type : String
+    },
+    seatcount : {
+        type : Number
     }
 })
 module.exports=mongoose.model('Room',roomid);
