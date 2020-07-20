@@ -1,28 +1,44 @@
 const express = require('express')
 const HttpError=require('../models/http-error');
-const User=require('../models/users');
-//const User=require('')
+const User=require('../models/user');
+const Global=require('../models/global');
+const mongoose = require('mongoose');
 
 
   const getById=async(req,res,next)=>{
    const Uid=req.params.uid;
+ //const {room_id,seatcount}=req.body;  
+  // console.log(typeof(Uid));
    let existingId;
    try{
-     existingId=await User.findById(Uid);
+     existingId=await User.findById((Uid));
+     console.log(existingId);
      if(!existingId||existingId.length==0){
       const error=new HttpError('user id not found',404);
       return next(error);
     }
-    // const Roomid = //code to get room id from database
-    res.json({Roomid:id});
+   let Roomid
+    try{
+     //Roomid =await Global.find({}).select('seatcount');
+     Roomid=await Global.find({},'-seatcount');
+   //  console.log(Roomid);
+     
+    }
+    catch(err){
+      const error=new HttpError("fetching roomid failed plz try again"+err,500);
+    return next(error);
+    } //code to get room id from database
+    res.json({Roomid});
+   // res.json({Roomid:Roomid.map(Rid=>Rid.toObject({getters:true}))});
 
 
    }catch(err){
-    const error=new HttpError("fetching id failed plz try again",500);
+    const error=new HttpError("fetching uid failed plz try again"+err,500);
     return next(error);
    }
 
-
+  }
+  exports.getById=getById;
 
 
 // const HttpError=require('../models/http-error');
@@ -80,4 +96,4 @@ const User=require('../models/users');
 
 
 // // exports.roomid=roomid;
-// exports.getById=getById;
+

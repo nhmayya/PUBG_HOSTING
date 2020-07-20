@@ -5,7 +5,7 @@ const global = new mongoose.Schema({
         type : String
     },
     seatcount : {
-        type : Number
+        type : String
     }
 })
-module.exports=mongoose.model('Room',roomid);
+module.exports=mongoose.model('Room',global);
