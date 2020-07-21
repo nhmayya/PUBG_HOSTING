@@ -8,8 +8,11 @@ const adminReset = async(req,res,next)=>{
     console.log(room_id)
     try {
         await room_id.save()
-    } catch (error) {
+    } catch (err) {
         console.log(error, "unavle to save room id")
+    //    const error=new HttpError('unable to '+err,500);
+    //    return next(error);
+
     }
 
 }

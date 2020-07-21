@@ -11,12 +11,18 @@ const Admin=require('./routes/global_routes');
 const mongoose=require('mongoose');
 const app=express();
 app.use(bodyParser.json());
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Headers','*');
+    res.setHeader('Access-Control-Allow-Methods','*');
+    next();
+
+})
 app.use('/api/Login',userRoute);
 //app.use('/api/',userIdRoutes); 
 app.use('/api/global',userIdRoutes);
 app.use('/api/Register',Register)
 app.use('/api/Admin',Admin)
-app.use('/api',Register)
 // SHOULD COMPLETE THE URL LINK
 //we have to import and use the routes folder
 app.use((req,res,next)=>{
