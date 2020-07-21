@@ -1,9 +1,71 @@
-h3 {
-    font-size: 3rem;
-    font-weight: 800;
-    text-align: center;
-}
-ul {
-    list-style: none;
-    font-size: medium;
-}
+.section-stories {
+    position: relative;
+    padding: 5rem 0; }
+    .bg-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        opacity: .15; }
+        .bg-video__content {
+          height: 100%;
+          width: 100%;
+          object-fit: cover; }
+
+          .u-centered-text {
+            text-align: center !important; }
+          
+          .u-margin-bottom-big {
+            margin-bottom: 8rem !important; }
+
+            .heading-secondary {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 3.5rem;
+                display: inline-block;
+                background-image: linear-gradient(to right, #7ed56f, #28b485);
+                -webkit-background-clip: text;
+                color: transparent;
+                transition: all .2s; }
+                @media only screen and (max-width: 56.25em) {
+                  .heading-secondary {
+                    font-size: 3rem; } }
+                @media only screen and (max-width: 37.5em) {
+                  .heading-secondary {
+                    font-size: 2.5rem; } }
+                .heading-secondary:hover {
+                  transform: skewY(2deg) skewX(15deg) scale(1.1);
+                  text-shadow: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.2); }
+
+                  row {
+                    max-width: 114rem;
+                    margin: 0 auto; }
+                    .row:not(:last-child) {
+                      margin-bottom: 8rem; }
+                      @media only screen and (max-width: 56.25em) {
+                        .row:not(:last-child) {
+                          margin-bottom: 6rem; } }
+                    @media only screen and (max-width: 56.25em) {
+                      .row {
+                        max-width: 50rem;
+                        padding: 0 3rem; } }
+                    .row::after {
+                      content: "";
+                      display: table;
+                      clear: both; }
+
+                      .story {
+                        width: 75%;
+                        margin: 0 auto;
+                        box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.1);
+                        background-color: rgba(255, 255, 255, 0.6);
+                        border-radius: 3px;
+                        padding: 6rem;
+                        padding-left: 9rem;
+                        font-size: 1.6rem;
+                        transform: skewX(-12deg); }
+                        .story__text {
+                            transform: skewX(12deg); }
+                            
