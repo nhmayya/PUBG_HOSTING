@@ -18,11 +18,19 @@ app.use((req,res,next)=>{
     next();
 
 })
-app.use('/api/Login',userRoute);
-//app.use('/api/',userIdRoutes); 
-app.use('/api/global',userIdRoutes);
-app.use('/api/Register',Register)
-app.use('/api/Admin',Admin)
+// app.use('/api/Login',userRoute);
+// app.use('/api/',userIdRoutes); 
+// app.use('/api/global',userIdRoutes);
+// app.use('/api/Register',Register);
+// app.use('/api/Admin',Admin);
+// app.use('/api',Register);
+
+app.use('/JAI_PUBG/Login',userRoute);
+//app.use('/JAI_PUBG',userIdRoutes); 
+app.use('/JAI_PUBG',userIdRoutes);
+app.use('/JAI_PUBG/Register',Register);
+app.use('/JAI_PUBG/Admin',Admin);
+app.use('/JAI_PUBG',Register);
 // SHOULD COMPLETE THE URL LINK
 //we have to import and use the routes folder
 app.use((req,res,next)=>{
