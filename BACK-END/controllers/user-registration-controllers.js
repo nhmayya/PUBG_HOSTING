@@ -3,6 +3,7 @@ const HttpError=require('../models/http-error');
 const User=require('../models/user');
 const Global=require('../models/global');
 const mongoose = require('mongoose');
+const { response } = require('express');
 
 const Register = async(req,res,next)=>{
  const {phonenumber: phoneBody, players : playersBody, uid : uidBody} = req.body
@@ -19,7 +20,7 @@ try {
 
     }
     if(phoneBody === phoneDB){
-       // console.log("Success ! have to send the response")
+        console.log("Success ! have to send the response")
         
         const seatCount = await Global.distinct('seatcount',{})
         console.log('guu',seatCount)
@@ -40,8 +41,11 @@ try {
             await temp.save()
             console.log("saved")
             //saving user
-            userFromDB.players = playersBody
+            console.log(playersBody);
+            console.log(userFromDB.players);
+            userFromDB.players=userFromDB.players.concat(playersBody);
             await userFromDB.save()
+            res.json({user:userFromDB})
 
         } catch (err) { 
             const error=new HttpError('Error While Connecting'+err,500);
@@ -52,6 +56,7 @@ try {
            return next(error);
             
         }
+        
     }
 
 } catch (err) {
@@ -61,7 +66,7 @@ try {
 }
 
 const seatcount = async (req,res,next)=>{
-    const {_id} = req.params.uid
+    const _id = req.params.uid
     console.log(_id)
     try {
         const userFromDB = await User.findById(_id)
@@ -75,10 +80,11 @@ const seatcount = async (req,res,next)=>{
             const { _id : uidDB,} = userFromDB
             if(_id == uidDB){
                 const seatCount = await Global.distinct('seatcount',{})
-                console.log(seatCount)
+               res.json({seat:JSON.parse(seatCount)})
+               
             }
         } catch (err) {
-            const error=new HttpError('Error While Connecting',500);
+            const error=new HttpError('Error While Connecting'+err.message,500);
             return next(error);
         }
     } catch (err) {

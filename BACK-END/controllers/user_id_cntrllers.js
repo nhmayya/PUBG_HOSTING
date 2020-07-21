@@ -26,7 +26,7 @@ const mongoose = require('mongoose');
       const error=new HttpError("Error While Connecting",500);
     return next(error);
     } //code to get room id from database
-    res.json({Roomid});
+    res.json({RoomID:Roomid[0].room_id});
    // res.json({Roomid:Roomid.map(Rid=>Rid.toObject({getters:true}))});
 
 
