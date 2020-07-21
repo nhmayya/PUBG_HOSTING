@@ -3,9 +3,8 @@ const bodyParser=require('body-parser');
 const HttpError=require('./models/http-error');
 const userRoute=require('./routes/user_login_routes');//login
 const userIdRoutes=require('./routes/user_id_routes');// if(uid) {response : roomid}
-// const SEAT=require('./routes/');
-// const Register=require('./routes/');
-// const userIdRoutes=require('./routes/');
+const Register=require('./routes/register_routes');
+const Admin=require('./routes/global_routes');
 
 
 
@@ -15,6 +14,8 @@ app.use(bodyParser.json());
 app.use('/api/Login',userRoute);
 //app.use('/api/',userIdRoutes); 
 app.use('/api/global',userIdRoutes);
+app.use('/api/Register',Register)
+app.use('/api/Admin',Admin)
 // SHOULD COMPLETE THE URL LINK
 //we have to import and use the routes folder
 app.use((req,res,next)=>{
@@ -28,7 +29,11 @@ app.use((error,req,res,next)=>{
     res.status(error.code||500).json({message:error.message||"something went wrong in catch block..."});
 
 });
-mongoose.connect('mongodb+srv://pubg:TCMJytM0Y4T0qz4R@cluster0.qofbg.mongodb.net/Hosting?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://pubg:TCMJytM0Y4T0qz4R@cluster0.qofbg.mongodb.net/Hosting?retryWrites=true&w=majority', {
+    useUnifiedTopology: true,             //THIS MIGHT RISE ERROR IN THE FUTURE
+    useCreateIndex:true,
+    useNewUrlParser: true
+})
 .then(()=>{
     console.log('successfully connected to the database');
     
