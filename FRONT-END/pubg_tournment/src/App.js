@@ -8,7 +8,6 @@ import Login from './Pages/login'
 import Signup from './Pages/findMatch'
 import {AuthContext} from './context/UserContext'
 import About from './Pages/about'
-import Model from './UIElements/Model'
 import Rules from './Pages/rules';
 
 function App() {
@@ -42,9 +41,7 @@ function App() {
             <About />
           </Route>
           <Route path='/rules' exact>
-            <Model show = {true} >
             <Rules />
-            </Model>
           </Route>
           <Route path='/' >
             <Home/>
