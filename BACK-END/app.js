@@ -16,6 +16,7 @@ app.use('/api/Login',userRoute);
 app.use('/api/global',userIdRoutes);
 app.use('/api/Register',Register)
 app.use('/api/Admin',Admin)
+app.use('/api',Register)
 // SHOULD COMPLETE THE URL LINK
 //we have to import and use the routes folder
 app.use((req,res,next)=>{

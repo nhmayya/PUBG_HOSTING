@@ -50,4 +50,30 @@ try {
 }
 }
 
+const seatcount = async (req,res,next)=>{
+    console.log("asdfgj")
+    const {_id} = req.body
+    console.log(_id)
+    try {
+        const userFromDB = await User.findById(_id)
+        if(!userFromDB) {
+           return console.log("id not found")
+        }
+        try {
+            globalid = await Global.distinct('_id',{})
+            const { _id : uidDB,} = userFromDB
+            if(_id == uidDB){
+                const seatCount = await Global.distinct('seatcount',{})
+                console.log(seatCount)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+   
+}
+
 exports.Register = Register
+exports.seatcount = seatcount
