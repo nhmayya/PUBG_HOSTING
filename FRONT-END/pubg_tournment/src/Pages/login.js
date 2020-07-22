@@ -28,7 +28,7 @@ const Login=props=>{
         otp:undefined
         },false);
 
-  const sendOTP=(event)=>{
+  const sendOTP=async (event)=>{
       event.preventDefault();
       setLoading1(true);
       setFormData({
@@ -38,26 +38,53 @@ const Login=props=>{
               isValid:false
           }
       })
-      try{
-    var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
-        size:"invisible",
-        callback:function (response){
-            console.log("captcha resolved");
-        }
-    });
-    var number = '+91'+formstate.inputs.phone.value;
-    firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
-        setotp(e);
-        setLoading1(false);
-      })
-      .catch(function (error) {
-          seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime");
-          setLoading1(false);
-      });
-    }catch(err){
-        setLoading1(false);
-        seterror("Try again")
-    }
+    //   try{
+    // var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
+    //     size:"invisible",
+    //     callback:function (response){
+    //         console.log("captcha resolved");
+    //     }
+    // });
+    // var number = '+91'+formstate.inputs.phone.value;
+    // firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
+    //     setotp(e);
+    //     setLoading1(false);
+    //   })
+    //   .catch(function (error) {
+    //       seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime");
+    //       setLoading1(false);
+    //   });
+    // }catch(err){
+    //     setLoading1(false);
+    //     seterror("Try again")
+    // }
+
+
+
+    try {
+        console.log("sender "+JSON.stringify({
+            phonenumber:'+91'+formstate.inputs.phone.value
+        }));
+        const responseData= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
+            method: 'POST',
+            headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+            phonenumber:'+91'+formstate.inputs.phone.value
+        })});
+         //responese handling
+         console.log("response is happened");
+         const data=responseData.json();
+         console.log('response is '+data);
+       } catch (err) {
+           console.log('error maccha'+err.message);
+       }
+       setLoading1(false)
+
+
+
     
   }
 
@@ -68,12 +95,25 @@ const Login=props=>{
         
         //send post to backend
         try {
-            const formData=new FormData();
-            formData.append('Phone',formstate.inputs.phone.value)
-            const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/LOGIN`,'POST',{},formData);
+            console.log("sender "+JSON.stringify({
+                phonenumber:'+91'+formstate.inputs.phone.value
+            }));
+            const response= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
+                method: 'POST',
+                headers:{
+                'Content-Type':'application/json'
+            },
+
+            body:JSON.stringify({
+                phonenumber:'+91'+formstate.inputs.phone.value
+            })});
              //responese handling
-             console.log(responseData);
-           } catch (err) {}
+             console.log("response is happened");
+            const data=await response.json();
+             console.log('response is '+data.Users.phonenumber);
+           } catch (err) {
+               console.log('error maccha'+err.message);
+           }
         //auth.LOGIN(UserID,Phone,Players)
 
         console.log(result.user);
