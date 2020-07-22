@@ -62,9 +62,7 @@ const Login=props=>{
 
 
     try {
-        console.log("sender "+JSON.stringify({
-            phonenumber:'+91'+formstate.inputs.phone.value
-        }));
+        
         const responseData= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
             method: 'POST',
             headers:{
@@ -77,7 +75,7 @@ const Login=props=>{
          //responese handling
          console.log("response is happened");
          const data=responseData.json();
-         console.log('response is '+data);
+         console.log('response is '+responseData.Users);
        } catch (err) {
            console.log('error maccha'+err.message);
        }
