@@ -15,21 +15,24 @@ const phonesignup=async(req,res,next)=>{
     }
  
     if(existingUser){
+        console.log("dps1");
            // const error=new HttpError('user exit already plz login insted',422);
             //return next(error);
-        res.json({users:existingUser})    
+            const Users=existingUser;
+        res.json({Users})    
     }else{
-
-        const createdUsers=new User({
+        console.log("dps2");
+        const Users=new User({
             phonenumber,   
         });
         try{
-            await createdUsers.save();
+            await Users.save();
         }catch(err){
             const error=new HttpError('Invalid Phonenumber Please try again',500);
             return next(error); 
         }
-        res.status(201).json({users:createdUsers});
+        console.log('user created '+Users);
+        res.status(201).json({Users});
     }
 };
 exports.phonesignup=phonesignup;
