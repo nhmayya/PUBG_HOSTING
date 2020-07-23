@@ -108,7 +108,7 @@ const Login=props=>{
              //responese handling
              console.log("response is happened");
             const data=await response.json();
-             console.log('response is '+data.phonenumber);
+             console.log('response is '+data.Users.phonenumber);
            } catch (err) {
                console.log('error maccha'+err.message);
            }
