@@ -1,4 +1,4 @@
-import React, { useState,useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {BrowserRouter,Redirect,Switch,Route} from 'react-router-dom'
 
 import List from './Pages/card/cards';
@@ -12,7 +12,7 @@ import Rules from './Pages/rules';
 
 function App() {
 
-  const [isLogedIn,SetLogedIn]=useState(false);
+  const [isLogedIn,setLogedIn]=useState(false);
   const [UserId,setUserID]=useState(null);
   const [Phonen,setPhone]=useState(null);
   const [Playerss,setPlayers]=useState([]);
@@ -20,10 +20,12 @@ function App() {
   const Log=useCallback((id,phone,players)=>{
     console.log("Login fuction in app.js");
     setUserID(id);
-    SetLogedIn(true);
+    console.log(id+' is id '+phone+' '+players);
+    setLogedIn(true);
     setPhone(phone);
     setPlayers(players);
-  } ,[]);
+    console.log("after setting "+isLogedIn);
+  } )
 
   return (
     
