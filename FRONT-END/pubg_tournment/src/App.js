@@ -14,10 +14,11 @@ function App() {
 
   const [isLogedIn,SetLogedIn]=useState(false);
   const [UserId,setUserID]=useState(null);
-  const [Phone,setPhone]=useState(null);
-  const [Players,setPlayers]=useState([]);
+  const [Phonen,setPhone]=useState(null);
+  const [Playerss,setPlayers]=useState([]);
 
   const Log=useCallback((id,phone,players)=>{
+    console.log("Login fuction in app.js");
     setUserID(id);
     SetLogedIn(true);
     setPhone(phone);
@@ -27,7 +28,7 @@ function App() {
   return (
     
     <div>   
-    <AuthContext.Provider value={{isLogedIn:isLogedIn,userID:UserId,Phone:Phone,Players:Players,LOGIN:Log}} >
+    <AuthContext.Provider value={{isLogedIn:isLogedIn,userID:UserId,Phone:Phonen,Players:Playerss,LOGIN:Log}} >
       <React.Fragment>
       <BrowserRouter>
         <Switch>
