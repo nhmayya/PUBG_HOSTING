@@ -6,31 +6,32 @@ import Nav from './Pages/Navigation/nav';
 import Home from './Pages/home'
 import Login from './Pages/login'
 import Signup from './Pages/findMatch'
-import {AuthContext} from './context/UserContext'
+import {AuthContext} from './context/AuthContext'
 import About from './Pages/about'
 import Rules from './Pages/rules';
 
 function App() {
 
-  const [isLogedIn,setLogedIn]=useState(false);
+  
   const [UserId,setUserID]=useState(null);
   const [Phonen,setPhone]=useState(null);
   const [Playerss,setPlayers]=useState([]);
+  const [isLogedIn,SetLogedIn]=useState(false);
+   
 
-  const Log=useCallback((id,phone,players)=>{
-    console.log("Login fuction in app.js");
+  const Login1 = useCallback((id,phone,players)=>{
+    console.log(id+" "+phone+" "+players);
     setUserID(id);
-    console.log(id+' is id '+phone+' '+players);
-    setLogedIn(true);
+    SetLogedIn(true);
     setPhone(phone);
-    setPlayers(players);
-    console.log("after setting "+isLogedIn);
-  } )
+    setPlayers(players)
+  },[]);
 
+  
   return (
     
     <div>   
-    <AuthContext.Provider value={{isLogedIn:isLogedIn,userID:UserId,Phone:Phonen,Players:Playerss,LOGIN:Log}} >
+    <AuthContext.Provider value={{isLogedIn:isLogedIn,UserId:UserId,Phone:Phonen,Players:Playerss,LOGIN:Login1}} >
       <React.Fragment>
       <BrowserRouter>
         <Switch>

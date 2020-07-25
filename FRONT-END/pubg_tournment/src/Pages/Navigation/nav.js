@@ -8,7 +8,7 @@ const nav = () => {
         <div className="navigation">
             <input type="checkbox" className="navigation__checkbox" id="nav-tog" />
 
-            <label for="nav-tog" className="navigation__button">
+            <label htmlFor="nav-tog" className="navigation__button">
                 <span className="navigation__icon">&nbsp;</span>
             </label>
 
@@ -16,15 +16,15 @@ const nav = () => {
 
             <nav className="navigation__nav">
                 <ul className="navigation__list">
-                    <li className="navigation__item"><a href="#" className="navigation__link"><span>01</span>home</a></li>
-                    <li className="navigation__item"><a href="/rules" className="navigation__link"><span>02</span>rules</a></li>
-                    <Link  to='/register' className="navigation__item">
-                        <a href="/register" className="navigation__link">
+                    <li className="navigation__item"><Link to="/" className="navigation__link"><span>01</span>home</Link></li>
+                    <li className="navigation__item"><Link to="/rules" className="navigation__link"><span>02</span>rules</Link></li>
+                    <li className="navigation__item">
+                        <Link to='/find' className="navigation__link">
                             <span>03</span>find
-                            </a>
                             </Link>
-                    <li className="navigation__item"><a href="/about" className="navigation__link"><span>04</span>about</a></li>
-                    <li className="navigation__item"><a href="/login" className="navigation__link"><span>05</span>Login</a></li>
+                            </li>
+                    <li className="navigation__item"><Link to='/about' className="navigation__link"><span>04</span>about</Link></li>
+                    <li className="navigation__item"><Link to="/login" className="navigation__link"><span>05</span>Login</Link></li>
                 </ul>
             </nav>
         </div>

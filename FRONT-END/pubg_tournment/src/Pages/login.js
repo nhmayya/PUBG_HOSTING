@@ -11,8 +11,8 @@ import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
 import {useHttpClient} from '../Hook/Http-Hook'
 import './login.css';
-import { AuthContext } from '../context/UserContext';
-import {auth} from './firebase'
+import { AuthContext } from '../context/AuthContext';
+// import {auth} from './firebase'
 
 const Login=props=>{
     const [isLoading1,setLoading1]=useState(false);
@@ -33,35 +33,34 @@ const Login=props=>{
   const sendOTP=async (event)=>{
       event.preventDefault();
       setLoading1(true);
-    //   setFormData({
-    //       ...formstate.inputs,
-    //       phone:{
-    //           ...formstate.inputs.phone,
-    //           isValid:false
-    //       }
-    //   })
-    //   try{
-    // var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
-    //     size:"invisible",
-    //     callback:function (response){
-    //         console.log("captcha resolved");
-    //     }
-    // });
-    // var number = '+91'+formstate.inputs.phone.value;
-    // firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
-    //     setotp(e);
-    //     setLoading1(false);
-    //   })
-    //   .catch(function (error) {
-    //       seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime"+error.message);
-    //       setLoading1(false);
-    //   });
-    // }catch(err){
-    //     setLoading1(false);
-    //     seterror("Try again")
-    // }
-    authentication.LOGIN("123",'98765432',['dattha','prasad'])
-    setLoading1(false)
+      setFormData({
+          ...formstate.inputs,
+          phone:{
+              ...formstate.inputs.phone,
+              isValid:false
+          }
+      })
+      try{
+    var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
+        size:"invisible",
+        callback:function (response){
+            console.log("captcha resolved");
+        }
+    });
+    var number = '+91'+formstate.inputs.phone.value;
+    firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
+        setotp(e);
+        setLoading1(false);
+      })
+      .catch(function (error) {
+          seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime"+error.message);
+          setLoading1(false);
+      });
+    }catch(err){
+        setLoading1(false);
+        seterror("Try again")
+    }
+    
 
 
 
@@ -100,7 +99,7 @@ const Login=props=>{
            }
 
         console.log(authentication)
-       // history.push('/');
+       history.push('/');
      }).catch(function (error) {
         console.error( error);
         seterror("OTP verification failed");

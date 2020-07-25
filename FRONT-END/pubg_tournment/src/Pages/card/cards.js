@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 
 import './cards.css';
 
@@ -116,7 +117,7 @@ const cards = () => {
                     </div>
 
                     <div className="u-centered-text u-margin-top-huge">
-                        <a href="#" className="btn btn--green">Discover all matches</a>
+                        <Link className="btn btn--green">Discover all matches</Link>
                     </div> 
                 </section>
     );

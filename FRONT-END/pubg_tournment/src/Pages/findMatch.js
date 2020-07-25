@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react'
+import React, { useContext, useState,useEffect, useRef } from 'react'
 import Select from 'react-select'
 
 import './findMatch.css'
@@ -7,7 +7,7 @@ import {VALIDATOR_REQUIRE} from '../FormElements/validater'
 import Card from '../UIElements/Card'
 import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
-import {AuthContext} from '../context/UserContext'
+import {AuthContext} from '../context/AuthContext'
 import {useHttpClient} from '../Hook/Http-Hook'
 import { Link } from 'react-router-dom'
 import LoadingSpinner from '../UIElements/LoadingSpinner'
@@ -26,7 +26,7 @@ const Signup=props=>{
     {value:'3',label:'Three'},
     {value:'4',label:'Four'}
   ];
-  let optionsFine=[];
+  let optionsFine=useRef([]);
 
   const [RRselected,setRRselected]=useState(false);
   const [AVAIL, setAVAIL] = useState();
@@ -37,32 +37,35 @@ const Signup=props=>{
       document.body.style.backgroundImage="url('https://www.hdwallpapers.in/download/alan_walker_a_ap_rocky_live_fast_pubg_4k-3840x2160.jpg')";
       document.body.style.backgroundRepeat='no-repeat';
       document.body.style.backgroundSize='cover';
-      if(auth.isLogedIn){
+      console.log(auth.UserId+" is stored id");
       try {
-       const responseData= await sendRequest(`http://localhost:5000/${auth.UserID}/SEAT`);
-        
-        setAVAIL(responseData.SEAT);
+       const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/${auth.UserId}/SEAT`);
+        console.log("response for seat is"+responseData.SEAT);
+        setAVAIL(responseData.SEAT+6);
+        console.log('avail is '+AVAIL);
         if(AVAIL===0) setemptySEAT(true)
-      else if(AVAIL<4){
-        if(auth.Players.length===2 && AVAIL===3){
-          optionsFine=options.slice(0,2)}
-        else if(auth.Players.length===3 && AVAIL>1){
-          optionsFine=options.slice(0,1);
+        if(AVAIL<4){
+          if(auth.Players.length>AVAIL){
+            optionsFine.current=options.slice(0,4-(auth.Players.length))
+          }
+          else{
+            
+            optionsFine.current=options.slice(0,AVAIL);
+          }
         }
-        else
-          optionsFine=options.slice(0,AVAIL);
-      }
+    else optionsFine.current=options;
     }
        catch (err) {}
-  } 
     };
     send();
-  }, [sendRequest]);
 
+  }, [sendRequest,auth.UserId,AVAIL,auth.Players.length]);
+
+ 
   
 
   const [selected,setSelected]=useState(null);
-  const [localStoring,setLoacalStoring]=useState(false)
+  // const [localStoring,setLoacalStoring]=useState(false)
   const [formstate,inputHandler]=useForm(
     {
     first:undefined,
@@ -77,8 +80,8 @@ const Signup=props=>{
 
   const submitHandler=async (event)=>{
     event.preventDefault();
-    setLoacalStoring(true);
-    var PArray=PArray=[formstate.inputs.first.value];
+    // setLoacalStoring(true);
+    var PArray=[formstate.inputs.first.value];
     
      if(selected==2) PArray=[formstate.inputs.first.value,formstate.inputs.second.value];
      else if(selected==3) PArray=[formstate.inputs.first.value,formstate.inputs.second.value,formstate.inputs.third.value];
@@ -142,7 +145,9 @@ const Signup=props=>{
               </Card>
             }
 
-            {auth.isLogedIn && auth.Players.length===4 && <Card className="authentication">
+            {auth.isLogedIn 
+             && auth.Players.length===4 
+            && <Card className="authentication">
               <h1 className="authentication__header"> YOU ALREADY REGISTERED MAX SEAT</h1>
               {/* add imogy */}
               </Card>}
@@ -167,7 +172,7 @@ const Signup=props=>{
           placeholder="Select the number of players,you want to REGISTER"
           defaultValue={selected}
           onChange={handleSelection}
-          options={optionsFine}/>
+          options={optionsFine.current}/>
         </form>}
           
           {selected && 

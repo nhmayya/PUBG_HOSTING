@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import {Link} from 'react-router-dom'
 
 import Logo from '../img/logo-white.png';
 import './home.css';
@@ -20,7 +21,7 @@ const Home=props=>{
                     <span className="heading-primary--sub">Let the opponent byte the dust</span>
                 </h1>
 
-                <a href="/register" className="btn btn--white btn--animation">register now</a>
+                <Link to='/register' className="btn btn--white btn--animation">register now</Link>
             </div>
         </header>
     )
