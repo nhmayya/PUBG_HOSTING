@@ -40,26 +40,56 @@ const Login=props=>{
               isValid:false
           }
       })
-      try{
-    var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
-        size:"invisible",
-        callback:function (response){
-            console.log("captcha resolved");
-        }
-    });
-    var number = '+91'+formstate.inputs.phone.value;
-    firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
-        setotp(e);
-        setLoading1(false);
-      })
-      .catch(function (error) {
-          seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime"+error.message);
-          setLoading1(false);
-      });
-    }catch(err){
-        setLoading1(false);
-        seterror("Try again")
-    }
+    //   try{
+    // var recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha',{
+    //     size:"invisible",
+    //     callback:function (response){
+    //         console.log("captcha resolved");
+    //     }
+    // });
+    // var number = '+91'+formstate.inputs.phone.value;
+    // firebase.auth().signInWithPhoneNumber(number,recaptcha).then( function(e) {
+    //     setotp(e);
+    //     setLoading1(false);
+    //   })
+    //   .catch(function (error) {
+    //       seterror("Your internet seems to be slow or Your number is blocked due to too many request, Try again after sometime"+error.message);
+    //       setLoading1(false);
+    //   });
+    // }catch(err){
+    //     setLoading1(false);
+    //     seterror("Try again")
+    // }
+
+
+    let data;
+    try {
+        console.log("sender "+JSON.stringify({
+            phonenumber:'+91'+formstate.inputs.phone.value
+        }));
+        const response= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
+            method: 'POST',
+            headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+            phonenumber:'+91'+formstate.inputs.phone.value
+        })});
+         //responese handling
+         console.log("response is happened");
+        data=await response.json();
+         console.log('response is '+data.Users.phonenumber);
+         
+    authentication.LOGIN(data.Users._id,data.Users.phonenumber,data.Users.players)
+       } catch (err) {
+           console.log('error maccha'+err.message);
+       }
+
+    console.log(authentication.UserId+' is stored in Login')
+   history.push('/');
+
+    setLoading1(false);
     
 
 
@@ -74,32 +104,32 @@ const Login=props=>{
     otp.confirm(formstate.inputs.otp.value).then(async function (result) {
         
         //send post to backend
-        let data;
-        try {
-            console.log("sender "+JSON.stringify({
-                phonenumber:'+91'+formstate.inputs.phone.value
-            }));
-            const response= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
-                method: 'POST',
-                headers:{
-                'Content-Type':'application/json'
-            },
+    //     let data;
+    //     try {
+    //         console.log("sender "+JSON.stringify({
+    //             phonenumber:'+91'+formstate.inputs.phone.value
+    //         }));
+    //         const response= await fetch(`http://localhost:5000/JAI_PUBG/Login`,{
+    //             method: 'POST',
+    //             headers:{
+    //             'Content-Type':'application/json'
+    //         },
 
-            body:JSON.stringify({
-                phonenumber:'+91'+formstate.inputs.phone.value
-            })});
-             //responese handling
-             console.log("response is happened");
-            data=await response.json();
-             console.log('response is '+data.Users.phonenumber);
+    //         body:JSON.stringify({
+    //             phonenumber:'+91'+formstate.inputs.phone.value
+    //         })});
+    //          //responese handling
+    //          console.log("response is happened");
+    //         data=await response.json();
+    //          console.log('response is '+data.Users.phonenumber);
              
-        authentication.LOGIN(data.Users._id,data.Users.phonenumber,data.Users.players)
-           } catch (err) {
-               console.log('error maccha'+err.message);
-           }
+    //     authentication.LOGIN(data.Users._id,data.Users.phonenumber,data.Users.players)
+    //        } catch (err) {
+    //            console.log('error maccha'+err.message);
+    //        }
 
-        console.log(authentication)
-       history.push('/');
+    //     console.log(authentication)
+    //    history.push('/');
      }).catch(function (error) {
         console.error( error);
         seterror("OTP verification failed");

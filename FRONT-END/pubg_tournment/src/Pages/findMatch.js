@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect, useRef } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import Select from 'react-select'
 
 import './findMatch.css'
@@ -9,14 +9,14 @@ import Button from '../FormElements/Button'
 import {useForm} from '../Hook/Form-hook'
 import {AuthContext} from '../context/AuthContext'
 import {useHttpClient} from '../Hook/Http-Hook'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import LoadingSpinner from '../UIElements/LoadingSpinner'
 import ErrorModal from '../UIElements/Error'
 
 // import GPayButton from 'react-google-pay-button'
 
 const Signup=props=>{
-
+  const history=useHistory();
   const auth=useContext(AuthContext);
   const {isLoading,error,sendRequest,clearError}=useHttpClient();
 
@@ -26,7 +26,7 @@ const Signup=props=>{
     {value:'3',label:'Three'},
     {value:'4',label:'Four'}
   ];
-  let optionsFine=useRef([]);
+  const [optionsFine,setOPtionsFine]=useState([]);
 
   const [RRselected,setRRselected]=useState(false);
   const [AVAIL, setAVAIL] = useState();
@@ -34,28 +34,31 @@ const Signup=props=>{
 
   useEffect(() => {
     const send = async () => {
-      document.body.style.backgroundImage="url('https://www.hdwallpapers.in/download/alan_walker_a_ap_rocky_live_fast_pubg_4k-3840x2160.jpg')";
-      document.body.style.backgroundRepeat='no-repeat';
-      document.body.style.backgroundSize='cover';
-      console.log(auth.UserId+" is stored id");
+      // document.body.style.backgroundImage="url('https://www.hdwallpapers.in/download/alan_walker_a_ap_rocky_live_fast_pubg_4k-3840x2160.jpg')";
+      // document.body.style.backgroundRepeat='no-repeat';
+      // document.body.style.backgroundSize='cover';
+      
+      if(auth.isLogedIn)
       try {
        const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/${auth.UserId}/SEAT`);
         console.log("response for seat is"+responseData.SEAT);
-        setAVAIL(responseData.SEAT+6);
+        setAVAIL(responseData.SEAT);
         console.log('avail is '+AVAIL);
-        if(AVAIL===0) setemptySEAT(true)
-        if(AVAIL<4){
+        if(AVAIL===0 ) setemptySEAT(true)
+        else if(AVAIL===2){//1-3,2-2,3-1
           if(auth.Players.length>AVAIL){
-            optionsFine.current=options.slice(0,4-(auth.Players.length))
+            setOPtionsFine(options.slice(0,4-(auth.Players.length)));
           }
           else{
-            
-            optionsFine.current=options.slice(0,AVAIL);
+            setOPtionsFine(options.slice(0,AVAIL));
           }
         }
-    else optionsFine.current=options;
+      
+        else if(AVAIL===1)  setOPtionsFine(options.slice(0,AVAIL));
+        else setOPtionsFine(options.slice(0,4-(auth.Players.length)));
+    console.log("options fine is "+optionsFine.length);
     }
-       catch (err) {}
+       catch (err) {console.log(err);}
     };
     send();
 
@@ -64,8 +67,7 @@ const Signup=props=>{
  
   
 
-  const [selected,setSelected]=useState(null);
-  // const [localStoring,setLoacalStoring]=useState(false)
+  const [selected,setSelected]=useState(0);
   const [formstate,inputHandler]=useForm(
     {
     first:undefined,
@@ -76,26 +78,39 @@ const Signup=props=>{
   
   const handleSelection=(selectedValue)=>{
     setSelected(selectedValue.value);
+    if(selectedValue.value===2){
+
+    }
   }
 
   const submitHandler=async (event)=>{
     event.preventDefault();
     // setLoacalStoring(true);
+    console.log(formstate.inputs.first+' is from state and selected'+selected);
     var PArray=[formstate.inputs.first.value];
     
-     if(selected==2) PArray=[formstate.inputs.first.value,formstate.inputs.second.value];
-     else if(selected==3) PArray=[formstate.inputs.first.value,formstate.inputs.second.value,formstate.inputs.third.value];
-     else PArray=[formstate.inputs.first.value,formstate.inputs.second.value,formstate.inputs.third.value,formstate.inputs.fourth.value] 
+     try{if(selected>1) PArray.push(formstate.inputs.second.value);
+     else if(selected>2) PArray.push(formstate.inputs.third.value);
+     else PArray.push(formstate.inputs.fourth.value) }catch(err){}
     
-    const formData=new FormData();
-      formData.append('Phone',auth.Phone);
-      formData.append('Players',PArray);
-      formData.append('UserID',auth.UserID)
-      
+    // const formData=new FormData();
+    //   formData.append('phonenumber',auth.Phone);
+    //   formData.append('players',PArray);
+    //   formData.append('uid',auth.UserID)
+
+    const formData=JSON.stringify({
+      phonenumber:auth.Phone,
+      players:PArray,
+     uid:auth.UserId 
+
+  })
+      console.log('form data'+formData);
     try {
-      const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/Register`,'POST',{},formData);
+      const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/Register`,'POST',{'Content-Type':'application/json'},formData);
        //responese handling
-       console.log(responseData);
+       console.log(responseData.Users.phonenumber+'\n'+responseData.Users._id+'\n'+responseData.Users.players+' is response of register');
+       auth.LOGIN(responseData.Users._id,responseData.Users.phonenumber,responseData.Users.players)
+       history.push('/')//should be room id
      } catch (err) {}
     
   }
@@ -128,11 +143,7 @@ const Signup=props=>{
 
       <ErrorModal error={error} onClear={clearError} />
       
-      {isLoading && (
-              <div className="center">
-                <LoadingSpinner />
-              </div>
-            )
+      {isLoading && <LoadingSpinner asOverlay/>
        }
       
             {/* if Not loged in back to login page */}
@@ -153,12 +164,12 @@ const Signup=props=>{
               </Card>}
 
             {/* SELECT PLAYERS */}
-        {auth.isLogedIn && emptySEAT &&  <Card className="authentication">
+        {!isLoading && auth.isLogedIn && emptySEAT &&  <Card className="authentication">
               <h1 className="authentication__header"> ALL SEATS ARE SALED</h1>
               {/* add imogy */}
               </Card>}
         
-        {auth.isLogedIn && !emptySEAT && <form className="selector">
+        {auth.isLogedIn && !emptySEAT && auth.Players.length!==4 && <form className="selector">
           <Select
            theme={theme => ({
             ...theme,
@@ -172,7 +183,7 @@ const Signup=props=>{
           placeholder="Select the number of players,you want to REGISTER"
           defaultValue={selected}
           onChange={handleSelection}
-          options={optionsFine.current}/>
+          options={optionsFine}/>
         </form>}
           
           {selected && 
