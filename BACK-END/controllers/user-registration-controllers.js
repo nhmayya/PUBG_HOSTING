@@ -8,9 +8,11 @@ const { response } = require('express');
 const Register = async(req,res,next)=>{
  const {phonenumber: phoneBody, players : playersBody, uid : uidBody} = req.body
  
+ 
 
 try {
     const userFromDB = await User.findById(uidBody)
+    console.log("ok");
     
     const { phonenumber : phoneDB, _id : uidDB,players : playersDB} = userFromDB
     if(!userFromDB){
@@ -31,7 +33,7 @@ try {
              globalid = await Global.distinct('_id',{})            
         } catch (err) {
            // console.log(error)
-           const error=new HttpError('Error While Connecting',500);
+           const error=new HttpError('Error While Connecting'+err,500);
            return next(error);
         }
         try {
@@ -45,22 +47,23 @@ try {
             console.log(userFromDB.players);
             userFromDB.players=userFromDB.players.concat(playersBody);
             await userFromDB.save()
-            res.json({user:userFromDB})
+            res.json({Users:userFromDB})
 
         } catch (err) { 
             const error=new HttpError('Error While Connecting'+err,500);
            return next(error);
         }
         } catch (err) {
-            const error=new HttpError('Error While Connecting',500);
+            const error=new HttpError('Error While Connecting+'+err,500);
            return next(error);
+
             
         }
         
     }
 
 } catch (err) {
-    const error=new HttpError('Error While Connecting',500);
+    const error=new HttpError('Error While Connecting-'+err,500);
     return next(error);
 }
 }
@@ -80,7 +83,7 @@ const seatcount = async (req,res,next)=>{
             const { _id : uidDB,} = userFromDB
             if(_id == uidDB){
                 const seatCount = await Global.distinct('seatcount',{})
-               res.json({seat:JSON.parse(seatCount)})
+               res.json({SEAT:JSON.parse(seatCount)})
                
             }
         } catch (err) {
