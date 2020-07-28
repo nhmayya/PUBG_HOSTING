@@ -1,5 +1,6 @@
 import React, { useContext, useState,useEffect } from 'react'
 import Select from 'react-select'
+import { StickyContainer, Sticky } from 'react-sticky';
 
 import './findMatch.css'
 import Input from '../FormElements/Input'
@@ -20,12 +21,7 @@ const Signup=props=>{
   const auth=useContext(AuthContext);
   const {isLoading,error,sendRequest,clearError}=useHttpClient();
 
-  const options=[
-    {value:'1',label:'One'},
-    {value:'2',label:'Two'},
-    {value:'3',label:'Three'},
-    {value:'4',label:'Four'}
-  ];
+  
   const [optionsFine,setOPtionsFine]=useState([]);
 
   const [RRselected,setRRselected]=useState(false);
@@ -40,6 +36,12 @@ const Signup=props=>{
       
       if(auth.isLogedIn)
       try {
+        const options=[
+          {value:'1',label:'One'},
+          {value:'2',label:'Two'},
+          {value:'3',label:'Three'},
+          {value:'4',label:'Four'}
+        ];
        const responseData= await sendRequest(`http://localhost:5000/JAI_PUBG/${auth.UserId}/SEAT`);
         console.log("response for seat is"+responseData.SEAT);
         setAVAIL(responseData.SEAT);
@@ -56,13 +58,12 @@ const Signup=props=>{
       
         else if(AVAIL===1)  setOPtionsFine(options.slice(0,AVAIL));
         else setOPtionsFine(options.slice(0,4-(auth.Players.length)));
-    console.log("options fine is "+optionsFine.length);
     }
        catch (err) {console.log(err);}
     };
     send();
 
-  }, [sendRequest,auth.UserId,AVAIL,auth.Players.length]);
+  }, [sendRequest,auth.UserId,AVAIL,auth.Players.length,auth.isLogedIn]);
 
  
   
@@ -110,7 +111,7 @@ const Signup=props=>{
        //responese handling
        console.log(responseData.Users.phonenumber+'\n'+responseData.Users._id+'\n'+responseData.Users.players+' is response of register');
        auth.LOGIN(responseData.Users._id,responseData.Users.phonenumber,responseData.Users.players)
-       history.push('/')//should be room id
+       history.push('/room')
      } catch (err) {}
     
   }
@@ -147,7 +148,7 @@ const Signup=props=>{
        }
       
             {/* if Not loged in back to login page */}
-            {!auth.isLogedIn &&
+            {!auth.isLogedIn && !isLoading &&
             <Card className="authentication">
               <h1 className="authentication__header"> YOU ARE NOT LOGED IN</h1>
             <Link to='/login'>
@@ -156,10 +157,12 @@ const Signup=props=>{
               </Card>
             }
 
-            {auth.isLogedIn 
+            {auth.isLogedIn && !isLoading
              && auth.Players.length===4 
             && <Card className="authentication">
               <h1 className="authentication__header"> YOU ALREADY REGISTERED MAX SEAT</h1>
+              <hr/>
+              <Button to='/room' primary>Click here for ROOM ID</Button>
               {/* add imogy */}
               </Card>}
 
@@ -169,8 +172,8 @@ const Signup=props=>{
               {/* add imogy */}
               </Card>}
         
-        {auth.isLogedIn && !emptySEAT && auth.Players.length!==4 && <form className="selector">
-          <Select
+        {!isLoading && auth.isLogedIn && !emptySEAT && auth.Players.length!==4 && <form className="selector">
+          <div><Select
            theme={theme => ({
             ...theme,
             borderRadius: 10,
@@ -184,6 +187,26 @@ const Signup=props=>{
           defaultValue={selected}
           onChange={handleSelection}
           options={optionsFine}/>
+           
+           
+           {auth.Players.length>0 &&<StickyContainer>
+       
+        <Sticky>
+        {({
+            style,
+ 
+            // // the following are also available but unused in this example
+           isSticky,
+            wasSticky,
+            distanceFromTop,
+            distanceFromBottom,
+            calculatedHeight
+          }) => (
+            <Button to='/room' exact='true'>ROOM ID</Button>
+          )}
+           </Sticky>
+        </StickyContainer>}
+         </div>
         </form>}
           
           {selected && 

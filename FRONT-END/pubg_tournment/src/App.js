@@ -9,6 +9,7 @@ import Signup from './Pages/findMatch'
 import {AuthContext} from './context/AuthContext'
 import About from './Pages/about'
 import Rules from './Pages/rules';
+import Display from './Pages/roomDisplay'
 
 function App() {
 
@@ -46,6 +47,9 @@ function App() {
           </Route>
           <Route path='/rules' exact>
             <Rules />
+          </Route>
+          <Route path='/room' exact>
+            <Display/>
           </Route>
           <Route path='/' >
             <Home/>

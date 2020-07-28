@@ -41,7 +41,7 @@ const cards = () => {
                                         <p className="card__price-only">only</p>
                                         <p className="card__price-value">₹10</p>
                                     </div>
-                                    <a href="#popup" className="btn btn--white">REGister now</a>
+                                    <Link to="/register" className="btn btn--white">REGister now</Link>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@ const cards = () => {
                                         <p className="card__price-only">only</p>
                                         <p className="card__price-value">₹10</p>
                                     </div>
-                                    <a href="#popup" className="btn btn--white">REGister now</a>
+                                    <Link to="/register" className="btn btn--white">REGister now</Link>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@ const cards = () => {
                                         <p className="card__price-only">only</p>
                                         <p className="card__price-value">₹10</p>
                                     </div>
-                                        <a href="#popup" className="btn btn--white">REGister now</a>
+                                        <Link to="/register" className="btn btn--white">REGister now</Link>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@ const cards = () => {
                     </div>
 
                     <div className="u-centered-text u-margin-top-huge">
-                        <Link className="btn btn--green">Discover all matches</Link>
+                        <Link to='/register' className="btn btn--green">Discover all matches</Link>
                     </div> 
                 </section>
     );
